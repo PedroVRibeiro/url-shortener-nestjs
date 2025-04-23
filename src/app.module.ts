@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { typeOrmAsyncConfig } from "./config/typeorm/typeorm.config";
+import { MigrationRunner } from "./config/database/migration.runner";
 
 @Module({
   imports: [
@@ -14,6 +15,6 @@ import { typeOrmAsyncConfig } from "./config/typeorm/typeorm.config";
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, MigrationRunner],
 })
 export class AppModule {}
