@@ -6,13 +6,20 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ResponseUserDTO } from './dtos/response-user.dto';
 import { RequestUserDto } from './dtos/request-user.dto';
 import { UserEntity } from './entities/user.entity';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('USERS')
 @Controller('users')
@@ -32,6 +39,8 @@ export class UsersController {
     return new ResponseUserDTO(createdUser);
   }
 
+  @ApiBearerAuth('jwt')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({
     status: 200,
@@ -45,6 +54,8 @@ export class UsersController {
     return allUsers.map((user: UserEntity) => new ResponseUserDTO(user));
   }
 
+  @ApiBearerAuth('jwt')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Get a user by its id' })
   @ApiResponse({
     status: 200,
@@ -58,6 +69,8 @@ export class UsersController {
     return new ResponseUserDTO(user);
   }
 
+  @ApiBearerAuth('jwt')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Get a user by its email' })
   @ApiResponse({
     status: 200,
@@ -71,6 +84,8 @@ export class UsersController {
     return new ResponseUserDTO(user);
   }
 
+  @ApiBearerAuth('jwt')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Update a user by its id' })
   @ApiResponse({
     status: 200,
@@ -82,6 +97,8 @@ export class UsersController {
     return await this.usersService.update(id, updateUserDto);
   }
 
+  @ApiBearerAuth('jwt')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Delete a user by its id' })
   @ApiResponse({
     status: 200,
