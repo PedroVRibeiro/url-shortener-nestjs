@@ -4,6 +4,7 @@ import { IsNull, Not, Repository } from 'typeorm';
 import { RequestUserDto } from './dtos/request-user.dto';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { hash } from 'bcrypt';
 
 export class UsersService {
   constructor(
@@ -12,7 +13,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: RequestUserDto): Promise<UserEntity> {
-    const { email } = createUserDto;
+    const { email, password } = createUserDto;
 
     const userExists = await this.usersRepository.findOne({
       where: { email, deleted_at: undefined },
@@ -24,7 +25,12 @@ export class UsersService {
       );
     }
 
-    const newUser = this.usersRepository.create(createUserDto);
+    const hashedPassword = await hash(password, 10);
+
+    const newUser = this.usersRepository.create({
+      ...createUserDto,
+      password: hashedPassword,
+    });
 
     return await this.usersRepository.save(newUser);
   }
