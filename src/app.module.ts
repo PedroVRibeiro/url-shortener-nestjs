@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmAsyncConfig } from './config/typeorm/typeorm.config';
 import { MigrationRunner } from './config/database/migration.runner';
 import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UsersModule } from './modules/users/users.module';
     }),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, MigrationRunner],
