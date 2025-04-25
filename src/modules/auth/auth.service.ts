@@ -28,7 +28,11 @@ export class AuthService {
       throw new NotFoundException('Incorrect email or password.');
     }
 
-    const token = this.jwtService.sign({ sub: user.id });
+    const token = this.jwtService.sign({
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    });
 
     return {
       user: instanceToPlain(user),

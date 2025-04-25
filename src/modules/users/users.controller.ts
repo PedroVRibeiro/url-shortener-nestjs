@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -20,6 +21,10 @@ import {
 } from '@nestjs/swagger';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from 'src/common/guards/roles.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { ParamIdDto } from './dtos/param-id.dto';
+import { assertIsSelfOrAdmin } from 'src/common/helpers/auth.helpers';
 
 @ApiTags('USERS')
 @Controller('users')
@@ -42,47 +47,62 @@ export class UsersController {
   }
 
   @ApiBearerAuth('jwt')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({
     status: 200,
     description: 'Users returned',
     type: [UserEntity],
   })
+  @Roles('ADMIN')
   @Get()
-  async findAll(): Promise<ResponseUserDTO[]> {
+  async findAll(
+    @Req() _req: Request & { user: { userId: string; role: string } },
+  ): Promise<ResponseUserDTO[]> {
     const allUsers = await this.usersService.findAll();
 
     return allUsers.map((user: UserEntity) => new ResponseUserDTO(user));
   }
 
   @ApiBearerAuth('jwt')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @ApiOperation({ summary: 'Get a user by its id' })
   @ApiResponse({
     status: 200,
     description: 'User returned',
     type: UserEntity,
   })
+  @Roles('ADMIN')
   @Get(':id')
-  async findOneById(@Param('id') id: string): Promise<ResponseUserDTO> {
+  async findOneById(
+    @Param() params: ParamIdDto,
+    @Req() req: Request & { user: { userId: string; role: string } },
+  ): Promise<ResponseUserDTO> {
+    const { id } = params;
+
+    assertIsSelfOrAdmin(req.user, id);
+
     const user = await this.usersService.findById(id);
 
     return new ResponseUserDTO(user);
   }
 
   @ApiBearerAuth('jwt')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @ApiOperation({ summary: 'Get a user by its email' })
   @ApiResponse({
     status: 200,
     description: 'User returned',
     type: UserEntity,
   })
+  @Roles('ADMIN')
   @Get('email/:email')
   async findOneByEmail(
     @Param('email') email: string,
+    @Req() req: Request & { user: { userId: string; role: string } },
   ): Promise<ResponseUserDTO> {
+    assertIsSelfOrAdmin(req.user, req.user.userId);
+
     const user = await this.usersService.findByEmail(email);
 
     return new ResponseUserDTO(user);
@@ -98,9 +118,14 @@ export class UsersController {
   })
   @Put(':id')
   async update(
-    @Param('id') id: string,
+    @Param() params: ParamIdDto,
     @Body() updateUserDto: UpdateUserDto,
+    @Req() req: Request & { user: { userId: string; role: string } },
   ): Promise<UpdateUserDto> {
+    const { id } = params;
+
+    assertIsSelfOrAdmin(req.user, id);
+
     return await this.usersService.update(id, updateUserDto);
   }
 
@@ -121,7 +146,14 @@ export class UsersController {
     },
   })
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  async remove(
+    @Param() params: ParamIdDto,
+    @Req() req: Request & { user: { userId: string; role: string } },
+  ) {
+    const { id } = params;
+
+    assertIsSelfOrAdmin(req.user, id);
+
     return await this.usersService.remove(id);
   }
 }
