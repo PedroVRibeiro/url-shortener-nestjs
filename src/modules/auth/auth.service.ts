@@ -4,6 +4,7 @@ import { SignInRequestDto } from './dtos/sign-in-request.dto';
 import { UsersService } from '../users/users.service';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +31,7 @@ export class AuthService {
     const token = this.jwtService.sign({ sub: user.id });
 
     return {
-      user,
+      user: instanceToPlain(user),
       token,
     };
   }

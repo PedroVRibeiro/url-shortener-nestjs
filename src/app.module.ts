@@ -7,6 +7,7 @@ import { typeOrmAsyncConfig } from './config/typeorm/typeorm.config';
 import { MigrationRunner } from './config/database/migration.runner';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { UrlsModule } from './modules/urls/urls.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AuthModule } from './modules/auth/auth.module';
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     UsersModule,
     AuthModule,
+    UrlsModule,
   ],
   controllers: [AppController],
   providers: [AppService, MigrationRunner],

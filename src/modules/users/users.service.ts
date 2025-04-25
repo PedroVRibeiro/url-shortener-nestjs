@@ -5,6 +5,7 @@ import { RequestUserDto } from './dtos/request-user.dto';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { hash } from 'bcrypt';
+import { instanceToPlain } from 'class-transformer';
 
 export class UsersService {
   constructor(
@@ -98,8 +99,12 @@ export class UsersService {
       }
     }
 
+    if (updateUserDto.password) {
+      updateUserDto.password = await hash(updateUserDto.password, 10);
+    }
+
     Object.assign(userExists, updateUserDto);
-    return this.usersRepository.save(userExists);
+    return instanceToPlain(this.usersRepository.save(userExists));
   }
 
   async remove(id: string) {
