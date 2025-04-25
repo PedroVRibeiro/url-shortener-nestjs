@@ -6,9 +6,11 @@ export class RequestUserDto {
   @IsEmail()
   email: string;
 
-  @ApiProperty({ type: 'string', minLength: 8, default: '11111111' })
+  @ApiProperty({ type: 'string', minLength: 8, default: 'defaults' })
   @IsString()
   @IsNotEmpty()
-  @MinLength(8)
+  @MinLength(8, {
+    message: 'Password must be at least 8 characters long',
+  })
   password: string;
 }

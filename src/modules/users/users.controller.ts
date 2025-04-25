@@ -33,7 +33,9 @@ export class UsersController {
     type: UserEntity,
   })
   @Post()
-  async create(@Body() createUserDto: RequestUserDto) {
+  async create(
+    @Body() createUserDto: RequestUserDto,
+  ): Promise<ResponseUserDTO> {
     const createdUser = await this.usersService.create(createUserDto);
 
     return new ResponseUserDTO(createdUser);
@@ -48,7 +50,7 @@ export class UsersController {
     type: [UserEntity],
   })
   @Get()
-  async findAll() {
+  async findAll(): Promise<ResponseUserDTO[]> {
     const allUsers = await this.usersService.findAll();
 
     return allUsers.map((user: UserEntity) => new ResponseUserDTO(user));
@@ -63,7 +65,7 @@ export class UsersController {
     type: UserEntity,
   })
   @Get(':id')
-  async findOneById(@Param('id') id: string) {
+  async findOneById(@Param('id') id: string): Promise<ResponseUserDTO> {
     const user = await this.usersService.findById(id);
 
     return new ResponseUserDTO(user);
@@ -78,7 +80,9 @@ export class UsersController {
     type: UserEntity,
   })
   @Get('email/:email')
-  async findOneByEmail(@Param('email') email: string) {
+  async findOneByEmail(
+    @Param('email') email: string,
+  ): Promise<ResponseUserDTO> {
     const user = await this.usersService.findByEmail(email);
 
     return new ResponseUserDTO(user);
@@ -93,7 +97,10 @@ export class UsersController {
     type: UserEntity,
   })
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<UpdateUserDto> {
     return await this.usersService.update(id, updateUserDto);
   }
 
