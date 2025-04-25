@@ -3,13 +3,20 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { UnauthorizedExceptionFilter } from './common/filters/unauthorized-exception.filter';
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const configService = app.get(ConfigService);
+
   app.useGlobalFilters(new UnauthorizedExceptionFilter());
   app.useGlobalPipes(
-    new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
   );
 
   const config = new DocumentBuilder()
@@ -30,6 +37,21 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, documentFactory);
 
-  await app.listen(3000);
+  const appPort = configService.get<number>('APP_PORT') || 3000;
+  const pgAdminPort = configService.get<number>('PGADMIN_PORT') || 5050;
+
+  await app.listen(appPort);
+
+  console.clear();
+
+  const banner = `
+============================================================
+🚀 App running:      http://localhost:${appPort}
+📚 Swagger Docs:     http://localhost:${appPort}/swagger
+🛢️  PgAdmin Panel:    http://localhost:${pgAdminPort}
+============================================================
+  `;
+
+  console.log(banner);
 }
 void bootstrap();

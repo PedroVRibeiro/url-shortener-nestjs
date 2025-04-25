@@ -18,5 +18,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
     autoLoadEntities: true,
     synchronize: false,
     logging: true,
+    retryAttempts: 10,
+    retryDelay: 3000,
   }),
 };
