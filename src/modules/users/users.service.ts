@@ -5,7 +5,7 @@ import { RequestUserDto } from './dtos/request-user.dto';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { hash } from 'bcrypt';
-import { instanceToPlain } from "class-transformer";
+import { instanceToPlain } from 'class-transformer';
 
 export class UsersService {
   constructor(
@@ -78,7 +78,7 @@ export class UsersService {
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     const { email } = updateUserDto;
-  
+
     const userExists = await this.usersRepository.findOne({
       where: { id, deleted_at: IsNull() },
     });

@@ -4,7 +4,7 @@ import { SignInRequestDto } from './dtos/sign-in-request.dto';
 import { UsersService } from '../users/users.service';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { instanceToPlain } from "class-transformer";
+import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
 export class AuthService {
