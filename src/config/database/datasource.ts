@@ -3,8 +3,10 @@ import * as dotenv from 'dotenv';
 
 dotenv.config({ path: process.env.DOTENV_CONFIG_PATH || '.env' });
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 export const AppDataSource = new DataSource(
-  process.env.DATABASE_URL
+  isProduction
     ? {
         type: 'postgres',
         url: process.env.DATABASE_URL,
@@ -27,4 +29,3 @@ export const AppDataSource = new DataSource(
         synchronize: false,
       },
 );
-
