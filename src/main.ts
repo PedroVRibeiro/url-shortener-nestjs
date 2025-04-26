@@ -4,11 +4,15 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { UnauthorizedExceptionFilter } from './common/filters/unauthorized-exception.filter';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { AppDataSource } from "./config/database/datasource";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
+
+  await AppDataSource.initialize();
+  await AppDataSource.runMigrations();
 
   app.useGlobalFilters(new UnauthorizedExceptionFilter());
   app.useGlobalPipes(
