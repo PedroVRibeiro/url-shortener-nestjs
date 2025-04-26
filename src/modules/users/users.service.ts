@@ -17,7 +17,7 @@ export class UsersService {
     const { email, password } = createUserDto;
 
     const userExists = await this.usersRepository.findOne({
-      where: { email, deleted_at: undefined },
+      where: { email, deleted_at: IsNull() },
     });
 
     if (userExists) {
@@ -41,7 +41,7 @@ export class UsersService {
       where: { deleted_at: IsNull() },
     });
 
-    if (!users) {
+    if (users.length === 0) {
       throw new NotFoundException('There are no users registered');
     }
 
@@ -90,7 +90,7 @@ export class UsersService {
 
     if (email) {
       const emailAlreadyRegistered = await this.usersRepository.findOne({
-        where: { email: email, id: Not(id) },
+        where: { email: email, id: Not(id), deleted_at: IsNull() },
       });
       if (emailAlreadyRegistered) {
         throw new BadRequestException(
@@ -109,12 +109,6 @@ export class UsersService {
 
   async remove(id: string) {
     const userExists = await this.findById(id);
-
-    if (!userExists) {
-      throw new NotFoundException(
-        'There is no registered user with the given id',
-      );
-    }
 
     await this.usersRepository.save({
       id: userExists.id,
