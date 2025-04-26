@@ -13,8 +13,7 @@ import { UrlsModule } from './modules/urls/urls.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: [ 
-        '.env'],
+      envFilePath: ['.env'],
     }),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     UsersModule,

@@ -24,7 +24,7 @@ export const AppDataSource = new DataSource(
   process.env.DATABASE_URL
     ? {
         type: 'postgres',
-        url: process.env.DATABASE_URL!,
+        url: process.env.DATABASE_URL,
         ssl: { rejectUnauthorized: false },
         ...common,
       }
@@ -38,4 +38,3 @@ export const AppDataSource = new DataSource(
         ...common,
       },
 );
-
