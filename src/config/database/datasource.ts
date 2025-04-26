@@ -1,21 +1,32 @@
 import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
 
-dotenv.config({ path: process.env.DOTENV_CONFIG_PATH || '.env' });
+const isProduction = Boolean(process.env.DATABASE_URL);
 
-const isProduction = process.env.NODE_ENV === 'production';
+if (!isProduction) {
+  dotenv.config({ path: process.env.DOTENV_CONFIG_PATH || '.env' });
+}
+
+console.log('🔍 DATASOURCE VARS:', {
+  NODE_ENV: process.env.NODE_ENV,
+  DATABASE_URL: process.env.DATABASE_URL,
+  DATABASE_HOST: process.env.DATABASE_HOST,
+  DATABASE_PORT: process.env.DATABASE_PORT,
+});
+
+const common = {
+  entities: ['dist/**/*.entity.{js,ts}'],
+  migrations: ['dist/migrations/*.{js,ts}'],
+  synchronize: false,
+};
 
 export const AppDataSource = new DataSource(
-  isProduction
+  process.env.DATABASE_URL
     ? {
         type: 'postgres',
-        url: process.env.DATABASE_URL,
-        ssl: {
-          rejectUnauthorized: false,
-        },
-        entities: ['dist/**/*.entity.{ts,js}'],
-        migrations: ['dist/migrations/*.{ts,js}'],
-        synchronize: false,
+        url: process.env.DATABASE_URL!,
+        ssl: { rejectUnauthorized: false },
+        ...common,
       }
     : {
         type: 'postgres',
@@ -24,8 +35,7 @@ export const AppDataSource = new DataSource(
         username: process.env.DATABASE_USER,
         password: process.env.DATABASE_PASS,
         database: process.env.DATABASE_NAME,
-        entities: ['dist/**/*.entity.{ts,js}'],
-        migrations: ['dist/migrations/*.{ts,js}'],
-        synchronize: false,
+        ...common,
       },
 );
+

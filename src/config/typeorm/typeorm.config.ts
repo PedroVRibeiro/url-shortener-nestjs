@@ -6,19 +6,45 @@ import {
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   inject: [ConfigService],
-  useFactory: (config: ConfigService): TypeOrmModuleOptions => ({
-    type: 'postgres',
-    host: config.get<string>('DATABASE_HOST'),
-    port: config.get<number>('DATABASE_PORT'),
-    database: config.get<string>('DATABASE_NAME'),
-    username: config.get<string>('DATABASE_USER'),
-    password: config.get<string>('DATABASE_PASS'),
-    entities: ['dist/**/*.entity.{ts,js}'],
-    migrations: ['dist/migrations/*.{ts,js}'],
-    autoLoadEntities: true,
-    synchronize: false,
-    logging: true,
-    retryAttempts: 10,
-    retryDelay: 3000,
-  }),
+  useFactory: (config: ConfigService): TypeOrmModuleOptions => {
+    const url = config.get<string>('DATABASE_URL');
+
+    console.log('TypeORM Config Vars →', {
+      url,
+      host: config.get<string>('DATABASE_HOST'),
+      port: config.get<string>('DATABASE_PORT'),
+      name: config.get<string>('DATABASE_NAME'),
+    });
+
+    if (url) {
+      return {
+        type: 'postgres',
+        url,
+        ssl: { rejectUnauthorized: false },
+        entities: ['dist/**/*.entity.{ts,js}'],
+        migrations: ['dist/migrations/*.{ts,js}'],
+        autoLoadEntities: true,
+        synchronize: false,
+        logging: true,
+        retryAttempts: 10,
+        retryDelay: 3000,
+      };
+    }
+
+    return {
+      type: 'postgres',
+      host: config.get<string>('DATABASE_HOST'),
+      port: parseInt(config.get<string>('DATABASE_PORT') || '5432', 10),
+      username: config.get<string>('DATABASE_USER'),
+      password: config.get<string>('DATABASE_PASS'),
+      database: config.get<string>('DATABASE_NAME'),
+      entities: ['dist/**/*.entity.{ts,js}'],
+      migrations: ['dist/migrations/*.{ts,js}'],
+      autoLoadEntities: true,
+      synchronize: false,
+      logging: true,
+      retryAttempts: 10,
+      retryDelay: 3000,
+    };
+  },
 };

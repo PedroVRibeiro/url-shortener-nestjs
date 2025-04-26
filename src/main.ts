@@ -7,6 +7,13 @@ import { ConfigService } from '@nestjs/config';
 import { AppDataSource } from './config/database/datasource';
 
 async function bootstrap() {
+  console.log('🔍 MAIN VARS:', {
+    NODE_ENV: process.env.NODE_ENV,
+    DATABASE_URL: process.env.DATABASE_URL,
+    DATABASE_HOST: process.env.DATABASE_HOST,
+    DATABASE_PORT: process.env.DATABASE_PORT,
+  });
+
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
