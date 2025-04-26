@@ -18,6 +18,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "migrate:prod": "ts-node src/config/database/migration-runner.ts",
     "prepare": "husky"
   },
   "dependencies": {
