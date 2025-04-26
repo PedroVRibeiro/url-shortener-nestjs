@@ -37,7 +37,8 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, documentFactory);
 
-  const appPort = process.env.PORT || configService.get<number>('APP_PORT') || 3000;
+  const appPort =
+    process.env.PORT || configService.get<number>('APP_PORT') || 3000;
   const pgAdminPort = configService.get<number>('PGADMIN_PORT') || 5050;
 
   await app.listen(appPort);
