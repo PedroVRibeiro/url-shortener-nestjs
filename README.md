@@ -49,18 +49,23 @@ Serviço de encurtamento de links, em NestJS utilizando Typescript. Utiliza banc
    ```sh
    cd url-shortener
    ```
-3. **Configure variáveis de ambiente**
+3. **Configure variáveis de ambiente (você pode usar o exemplo na .env)**
   ```bash
   cp .env.example .env
 
-  NODE_ENV=development
-  DATABASE_HOST=localhost
-  DATABASE_PORT=5432
-  DATABASE_USER=seu_usuario
-  DATABASE_PASS=sua_senha
-  DATABASE_NAME=url_shortener
-  JWT_SECRET=umSegredoMuitoForte
-  JWT_EXPIRATION=3600s
+# NODE_ENV=development
+# #Auth
+# APP_SECRET=mysecret
+# #Database
+# DATABASE_HOST=db
+# DATABASE_PORT=5432
+# DATABASE_USER=postgres
+# DATABASE_PASS=postgres
+# DATABASE_NAME=postgres
+# #PgAdmin
+# PGADMIN_DEFAULT_EMAIL=admin@admin.com
+# PGADMIN_DEFAULT_PASSWORD=pgadmin4
+# PGADMIN_PORT=5050
   ```
 
 4. **Executar Docker Compose**
