@@ -42,16 +42,24 @@ Serviço de encurtamento de links, em NestJS utilizando Typescript. Utiliza banc
 
 1. **Clone o repositório**
   ```env  
-   git clone https://github.com/seu-usuario/url-shortener.git
+   git clone https://github.com/PedroVRibeiro/url-shortener-nestjs
    ```
-
 2. **Acesse a pasta do projeto**    
-   ```sh
-   cd url-shortener
-   ```
-3. **Configure variáveis de ambiente (você pode usar o exemplo na .env)**
+ ```bash
+ cd url-shortener
+  ```
+3. **Renomeie a .env e configure variáveis de ambiente (você pode usar o exemplo na .env)**
+ ```bash
+CMD (Windows): rename .env.example .env
+  ```
+```bash
+Powershell (Windows): Rename-Item .env.example .env
+  ```
+```bash
+Linux ou MacOS: mv .env.example .env
+  ```
   ```bash
-  cp .env.example .env
+Exemplo das variáveis:
 
 # NODE_ENV=development
 # #Auth
