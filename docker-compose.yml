@@ -20,7 +20,7 @@ services:
     env_file:
       - .env
     environment:
-      - APP_PORT=${APP_PORT}
+      - PORT=${PORT}
       - APP_SECRET=${APP_SECRET}
       - TOKEN_EXPIRES=${TOKEN_EXPIRES}
       - DATABASE_USER=${DATABASE_USER}
@@ -29,7 +29,7 @@ services:
       - DATABASE_HOST=${DATABASE_HOST}
       - DATABASE_PORT=${DATABASE_PORT}
     ports:
-      - '${APP_PORT}:${APP_PORT}'
+      - '${PORT}:${PORT}'
     depends_on:
       - db
     volumes:

@@ -36,14 +36,12 @@ describe('AuthController', () => {
       const signInRequestDto: SignInRequestDto = {
         email: 'test@example.com',
         password: 'defaults',
-        role: 'USER',
       };
 
       const response: SignInResponseDto = {
         user: {
           id: 'user-id',
           email: signInRequestDto.email,
-          role: signInRequestDto.role,
         },
         token: 'mocked-jwt-token',
       };

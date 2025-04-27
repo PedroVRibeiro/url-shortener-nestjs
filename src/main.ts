@@ -7,13 +7,6 @@ import { ConfigService } from '@nestjs/config';
 import { AppDataSource } from './config/database/datasource';
 
 async function bootstrap() {
-  console.log('🔍 MAIN VARS:', {
-    NODE_ENV: process.env.NODE_ENV,
-    DATABASE_URL: process.env.DATABASE_URL,
-    DATABASE_HOST: process.env.DATABASE_HOST,
-    DATABASE_PORT: process.env.DATABASE_PORT,
-  });
-
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
@@ -49,6 +42,7 @@ async function bootstrap() {
   SwaggerModule.setup('swagger', app, documentFactory);
 
   const appPort = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+  const baseUrl = configService.get<string>('BASE_URL') || 'http://localhost:';
   const pgAdminPort = configService.get<number>('PGADMIN_PORT') || 5050;
 
   await app.listen(appPort);
@@ -57,9 +51,9 @@ async function bootstrap() {
 
   const banner = `
 ============================================================
-🚀 App running:      http://localhost:${appPort}
-📚 Swagger Docs:     http://localhost:${appPort}/swagger
-🛢️  PgAdmin Panel:    http://localhost:${pgAdminPort}
+🚀 App running:      ${baseUrl}${appPort}
+📚 Swagger Docs:     ${baseUrl}${appPort}/swagger
+🛢️  PgAdmin Panel:    ${baseUrl}${pgAdminPort}
 ============================================================
   `;
 

@@ -9,13 +9,6 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
   useFactory: (config: ConfigService): TypeOrmModuleOptions => {
     const url = config.get<string>('DATABASE_URL');
 
-    console.log('TypeORM Config Vars →', {
-      url,
-      host: config.get<string>('DATABASE_HOST'),
-      port: config.get<string>('DATABASE_PORT'),
-      name: config.get<string>('DATABASE_NAME'),
-    });
-
     if (url) {
       return {
         type: 'postgres',

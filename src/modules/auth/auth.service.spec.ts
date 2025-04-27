@@ -48,14 +48,12 @@ describe('AuthService', () => {
     const signInRequestDto: SignInRequestDto = {
       email: 'test@example.com',
       password: 'defaults',
-      role: 'USER',
     };
 
     const user = {
       id: 'user-id',
       email: 'test@example.com',
       password: 'hashed-password',
-      role: 'USER',
     } as unknown as UserEntity;
 
     it('should return user and token if credentials are correct', async () => {
