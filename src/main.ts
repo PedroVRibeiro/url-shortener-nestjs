@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { AppDataSource } from './config/database/datasource';
 
 async function bootstrap() {
+  let banner;
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
@@ -49,13 +50,22 @@ async function bootstrap() {
 
   console.clear();
 
-  const banner = `
+  if (configService.get<string>('BASE_URL')) {
+    banner = `
+============================================================
+🚀 App running:      ${baseUrl}
+📚 Swagger Docs:     ${baseUrl}/swagger
+============================================================
+  `;
+  } else {
+    banner = `
 ============================================================
 🚀 App running:      ${baseUrl}${appPort}
 📚 Swagger Docs:     ${baseUrl}${appPort}/swagger
 🛢️  PgAdmin Panel:    ${baseUrl}${pgAdminPort}
 ============================================================
   `;
+  }
 
   console.log(banner);
 }
