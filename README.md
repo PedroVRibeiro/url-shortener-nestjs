@@ -20,6 +20,11 @@ Serviço de encurtamento de links, em NestJS utilizando Typescript. Utiliza banc
 
 ---
 
+## Novas funcionalidades
+- **Role Based Access (ADMIN e USER)**
+- **Códigos de URLs curtas únicos**
+
+
 ## Pré-requisitos
 
 - Git  
