@@ -20,7 +20,7 @@ export class RequestUserDto {
   })
   password: string;
 
-  @ApiProperty({ type: 'string', default: 'USER' })
+  @ApiProperty({ type: 'string', default: 'ADMIN' })
   @IsString()
   @IsNotEmpty()
   @IsIn(['ADMIN', 'USER'], {
